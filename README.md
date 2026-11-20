@@ -1,27 +1,34 @@
-# Ops Triage Lab
+﻿# Ops Triage Lab
 
-A portfolio prototype for teams deciding which operational issues to tackle first and which repetitive tasks are worth automating. The demo uses fictional lab operations, digital services and application support examples.
+A portfolio prototype for investigating operational issues, comparing improvements and measuring results. All examples use fictional lab operations, digital services and application support data.
 
 ## Try it locally
 
-Open `dist/index.html` in your browser. There are no packages to install, credentials to enter or backend services to start. For a hosted demo on GitHub Pages, publish the contents of `dist/` as the site root.
+Open `dist/index.html` in a modern browser. No packages, credentials or backend services are needed. For GitHub Pages, publish `dist/` as the site root.
 
-## Demo walkthrough
+## Explore the workflow
 
-1. Start with the seeded queue and open **How the scores work** to see how priority is calculated.
-2. Log a repeatable task with 10 occurrences a week at 12 minutes each. The prototype flags it for a pilot and estimates one hour saved per week.
-3. Resolve or reopen it, filter the queue and export all records as CSV.
+- Use the **New**, **Investigating**, **Pilot** and **Resolved** board columns to see work in progress. Cards are ordered by priority, then weekly workload.
+- Click an issue title to assign an owner, write investigation notes and choose a manual fix, process improvement or automation approach.
+- Change stages directly in the issue details. Issues can move back to investigation or skip a pilot when appropriate.
+- Adjust expected time reduction and implementation effort to compare weekly savings and payback before saving a scenario.
+- Record weekly time after a change to compare measured savings with the estimate. Blank means unmeasured; zero means no time remains; a negative saving indicates increased workload.
+- Save changes to add an activity entry. Search by title, team or owner, filter by team or approach, and export all issues as CSV.
 
-Priority = twice the impact + urgency + a frequency band. Impact and urgency each range from 1 to 3. The frequency band is 1 for 1–4 occurrences, 2 for 5–14, and 3 at 15 or more. High priority starts at 10, medium at 7. Candidate tasks must be repeatable and account for at least one hour of manual work per week. Estimated savings assume a 50% reduction. In practice, validate assumptions against a timed manual baseline and a pilot.
+Fresh browser storage includes examples across all four stages. Existing records from the earlier version are retained: open issues become New and resolved issues stay Resolved. Workflow changes persist under the same browser storage key. Different browsers, devices or origins do not share records.
 
-## What this demonstrates
+## Calculations
 
-- **Digital transformation:** workflow intake, prioritisation, and a transparent business case for automation.
-- **Lab operations:** repetitive test logging and report preparation as pilot candidates.
-- **Application development:** validation, debugging-friendly separation of logic from UI, version control, and tests.
+Priority = twice the impact + urgency + a frequency band. Impact and urgency range from 1 to 3. Frequency bands are 1 for 1–4 occurrences, 2 for 5–14 and 3 for 15 or more. High priority starts at 10; medium at 7.
 
-The prototype uses vanilla JavaScript and browser storage. No AI service or real operational data is involved. It was built with Codex. A next iteration could add reviewed AI categorisation, an owner field and measured pilot outcomes.
+Repeatable tasks with at least 60 minutes of weekly manual work are automation candidates. The overview's potential savings use a fixed 50% reduction for active candidates. Per-issue scenarios use the selected reduction, including for manual and process improvements. Payback is implementation minutes divided by expected weekly savings. A 0% reduction has no payback.
+
+Measured savings equal original weekly workload minus the recorded weekly time after the change. The measured overview aggregates all records with an outcome, independently of stage. These figures are user-entered results, not automatically verified measurements.
+
+## Implementation
+
+Buildless HTML, CSS and vanilla JavaScript. `dist/logic.js` contains calculations, migration and CSV exports; `dist/app.js` manages the board, dialogs and browser storage. No AI service or external database is involved. The app was built with Codex.
 
 ## Tests
 
-With Node.js installed, run `node --test tests/logic.test.js`. Tests cover priority boundaries, the automation threshold and spreadsheet formula handling in CSV exports.
+With Node.js installed, run `node --test tests/logic.test.js`. Tests cover scoring boundaries, automation thresholds, legacy record migration, scenario payback, measured outcomes and CSV formula protection/escaping.
