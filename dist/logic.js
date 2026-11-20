@@ -33,10 +33,10 @@
       measured:issue.actualMinutes===null?null:time(issue)-issue.actualMinutes};
   }
   function workflowCsv(issues) {
-    const extra=['Owner','Resolution path','Expected reduction (%)','Implementation hours','Measured minutes per week','Notes'];
+    const extra=['Owner','Resolution path','Expected reduction (%)','Implementation hours','Measured minutes per week','Notes','Impact','Urgency','Repeatable'];
     const baseHeader=csv([]);
     return [baseHeader+','+extra.map(csvCell).join(','), ...issues.map(i=>
-      csv([i]).slice(baseHeader.length+2)+','+[i.owner??'',i.path??'undecided',i.reduction??50,i.effort??2,i.actualMinutes??'',i.notes??''].map(csvCell).join(','))].join('\r\n');
+      csv([i]).slice(baseHeader.length+2)+','+[i.owner??'',i.path??'undecided',i.reduction??50,i.effort??2,i.actualMinutes??'',i.notes??'',i.impact,i.urgency,i.repeatable?'Yes':'No'].map(csvCell).join(','))].join('\r\n');
   }
   const api={time,score,priority,candidate,saved,csv:workflowCsv,stages,normalize,scenario};
   if(typeof module!=='undefined')module.exports=api;else root.OpsLogic=api;

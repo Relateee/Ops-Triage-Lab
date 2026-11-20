@@ -19,6 +19,18 @@ Fresh browser storage includes examples across all four stages. Existing records
 
 ## Calculations
 
+The **Analysis** view ranks up to eight active issues by weekly manual workload, independently of priority. The suggested pilot is the highest-workload active issue that meets the automation threshold. The results table compares the current scenario estimate with recorded weekly savings and excludes unmeasured issues.
+
+## Demo walkthrough
+
+1. Open **Analysis**. On a fresh browser, the shift handoff task ranks first at four hours of manual work per week and qualifies for a pilot.
+2. Compare the two simulated outcomes. Daily test logs saved 120 minutes per week against 90 estimated. The onboarding checklist saved 12 minutes against 15 estimated.
+3. Open the **Board**, choose **Import CSV**, and download the sample. Select that file to preview the rows and confirm the import. Select it a second time to see the duplicate checks.
+
+The CSV preview checks required headers, blank fields, allowed teams and numeric ranges. It skips duplicates by team and title, ignoring case and extra spaces in titles. Valid rows are added only after confirmation. The updated CSV export includes all required import fields. Existing browser records stay in place, so use a private window if you want to see the fresh demo examples.
+
+## Scoring and estimates
+
 Priority = twice the impact + urgency + a frequency band. Impact and urgency range from 1 to 3. Frequency bands are 1 for 1–4 occurrences, 2 for 5–14 and 3 for 15 or more. High priority starts at 10; medium at 7.
 
 Repeatable tasks with at least 60 minutes of weekly manual work are automation candidates. The overview's potential savings use a fixed 50% reduction for active candidates. Per-issue scenarios use the selected reduction, including for manual and process improvements. Payback is implementation minutes divided by expected weekly savings. A 0% reduction has no payback.
@@ -31,4 +43,4 @@ Buildless HTML, CSS and vanilla JavaScript. `dist/logic.js` contains calculation
 
 ## Tests
 
-With Node.js installed, run `node --test tests/logic.test.js`. Tests cover scoring boundaries, automation thresholds, legacy record migration, scenario payback, measured outcomes and CSV formula protection/escaping.
+With Node.js installed, run `node --test tests/logic.test.js tests/import.test.js`. Tests cover scoring, migration, estimates, measured outcomes, CSV escaping and import validation.

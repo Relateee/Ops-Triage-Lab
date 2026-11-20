@@ -1,24 +1,59 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Investigate operational issues, compare improvements and measure pilot results."><title>Ops Triage Lab</title><link rel="stylesheet" href="style.css"><script defer src="logic.js"></script><script defer src="app.js"></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Investigate operational issues, compare improvements and measure pilot results."><title>Ops Triage Lab</title><link rel="stylesheet" href="style.css"><script defer src="logic.js"></script><script defer src="import.js"></script><script defer src="app.js"></script></head>
 <body>
 <header><div class="wrap mast"><span class="mark" aria-hidden="true">OT</span><strong>Ops Triage Lab</strong><span class="tag">Portfolio demo · synthetic data</span></div></header>
 <main class="wrap">
-<section class="hero"><div><p class="eyebrow">WORKFLOW IMPROVEMENT</p><h1>Find the work worth fixing.</h1><p>Investigate the problem. Explore a better approach. Measure what changes.</p></div><button id="add" type="button">Log an issue</button></section>
-<section class="metrics" aria-label="Workflow metrics"><div><span>Active issues</span><strong id="open">0</strong></div><div><span>High priority</span><strong id="high">0</strong></div><div><span>Potential hours saved / week</span><strong id="hours">0.0</strong><small>Active automation candidates · 50% estimate</small></div><div><span>Measured hours saved / week</span><strong id="measured">—</strong><small id="measured-count">No results recorded</small></div></section>
-<section class="workspace" aria-labelledby="board-title"><div class="panel-head"><div><h2 id="board-title">Improvement board</h2><p>Open an issue to investigate, compare options or record a result.</p></div><button id="export" type="button" class="secondary">Export CSV</button></div>
-<div class="filters"><label>Search<input id="search" type="search" placeholder="Issue, team or owner"></label><label>Team<select id="team-filter"><option value="all">All teams</option><option>Lab operations</option><option>Digital services</option><option>Application support</option></select></label><label>Resolution path<select id="path-filter"><option value="all">All paths</option><option value="undecided">Undecided</option><option value="manual">Manual fix</option><option value="process">Process improvement</option><option value="automation">Automation</option></select></label></div>
+<section class="hero"><h1>Ops workspace</h1><button id="add" type="button" aria-haspopup="dialog"><span aria-hidden="true">+</span> New issue</button></section>
+<nav class="view-switch" aria-label="Workspace views">
+  <button id="show-board" type="button" aria-controls="board-view" aria-pressed="true">Board</button>
+  <button id="show-analysis" type="button" aria-controls="analysis-view" aria-pressed="false">Analysis</button>
+</nav>
+<div id="board-view">
+<section class="metrics" aria-label="Workflow metrics"><div><span>Active issues</span><strong id="open">0</strong></div><div><span>High priority</span><strong id="high">0</strong></div><div><span>Potential savings</span><strong id="hours">0.0</strong><small>Active automation candidates · 50% estimate</small></div><div><span>Measured savings</span><strong id="measured">—</strong><small>Hours / week</small></div></section>
+<section class="workspace" aria-label="Issue board">
+<div class="filters"><label>Search<input id="search" type="search" placeholder="Title, team or owner"></label><label>Team<select id="team-filter"><option value="all">All teams</option><option>Lab operations</option><option>Digital services</option><option>Application support</option></select></label><label>Resolution path<select id="path-filter"><option value="all">All paths</option><option value="undecided">Undecided</option><option value="manual">Manual fix</option><option value="process">Process improvement</option><option value="automation">Automation</option></select></label><div class="data-actions"><button id="open-import" type="button" class="secondary" aria-haspopup="dialog">Import CSV</button><button id="export" type="button" class="secondary">Export CSV</button></div></div>
 <p id="notice" role="status" aria-live="polite"></p><div id="board" class="board"></div></section>
+</div>
+<section id="analysis-view" aria-label="Analysis" hidden>
+  <div class="analysis-grid">
+    <section class="panel analysis-panel" aria-labelledby="workload-title">
+      <h2 id="workload-title">Weekly manual workload</h2>
+      <p class="meta" id="workload-scope">Active issues ? highest workload first</p>
+      <ol id="workload-chart" class="workload-chart"></ol>
+      <p id="recommendation" class="recommendation"></p>
+    </section>
+    <section class="panel analysis-panel" aria-labelledby="results-title">
+      <h2 id="results-title">Estimated vs. measured savings</h2>
+      <p class="meta" id="results-scope"></p>
+      <div id="results-table-wrap" class="results-scroll" role="region" aria-labelledby="results-title" tabindex="0">
+        <table class="results-table" aria-label="Weekly savings in minutes">
+          <thead><tr><th scope="col">Issue</th><th scope="col">Estimate</th><th scope="col">Measured</th><th scope="col">Difference</th></tr></thead>
+          <tbody id="results-table"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</section>
 <details class="panel explain"><summary>How the estimates work</summary><p>Priority = 2 × impact + urgency + frequency band. The band is 1 for 1–4 occurrences, 2 for 5–14, and 3 for 15 or more. A score of 10 or more is high priority; 7–9 is medium.</p><p>Repeatable tasks taking at least 60 minutes a week are automation candidates. The overview assumes 50% savings. Each issue has its own adjustable scenario: weekly savings = baseline time × expected reduction; payback = implementation time ÷ weekly savings.</p><p>Measured savings compare the original weekly workload with the weekly time recorded after a change. Negative results mean the work took longer. Estimates and recorded results are kept separate. All records stay in this browser.</p></details>
-<footer>Built as a workflow improvement prototype. Use fictional data. No AI service or external database.</footer>
+<footer>Demo data ? Changes stay in this browser</footer>
 </main>
-<dialog id="intake" aria-labelledby="intake-title"><div class="dialog-head"><h2 id="intake-title">Log an issue</h2><button type="button" class="secondary" data-close="intake">Close</button></div><p>Start with the problem. Choose an approach after investigating.</p>
+<dialog id="intake" aria-labelledby="intake-title"><div class="dialog-head"><h2 id="intake-title">New issue</h2><button type="button" class="secondary" data-close="intake">Close</button></div>
 <form id="form"><label>Issue title<input name="title" required maxlength="90" placeholder="e.g. Manual test log cleanup"></label><div class="fields"><label>Team<select name="team"><option>Lab operations</option><option>Digital services</option><option>Application support</option></select></label><label>Owner<input name="owner" maxlength="80" placeholder="Unassigned"></label><label>Impact<select name="impact"><option value="1">1 · Minor</option><option value="2" selected>2 · Moderate</option><option value="3">3 · Major</option></select></label><label>Urgency<select name="urgency"><option value="1">1 · Flexible</option><option value="2" selected>2 · This week</option><option value="3">3 · Immediate</option></select></label><label>Occurrences / week<input name="frequency" required type="number" min="1" max="1000" value="5"></label><label>Minutes / occurrence<input name="minutes" required type="number" min="1" max="600" value="15"></label></div><label class="check"><input name="repeatable" type="checkbox"> Steps are consistent and repeatable</label><button type="submit">Add to board</button></form></dialog>
 <dialog id="detail" aria-labelledby="detail-title"><div class="dialog-head"><div><p class="eyebrow" id="detail-team"></p><h2 id="detail-title"></h2></div><button type="button" class="secondary" data-close="detail">Close</button></div><p id="detail-baseline"></p>
-<form id="detail-form"><div class="fields"><label>Stage<select id="detail-stage" name="status"><option value="new">New</option><option value="investigating">Investigating</option><option value="pilot">Pilot</option><option value="resolved">Resolved</option></select></label><label>Owner<input id="detail-owner" name="owner" maxlength="80" placeholder="Unassigned"></label></div><label>Resolution path<select id="detail-path" name="path"><option value="undecided">Undecided</option><option value="manual">Manual fix</option><option value="process">Process improvement</option><option value="automation">Automation</option></select></label><p id="path-hint" class="hint"></p>
-<label>Investigation &amp; proposed approach<textarea id="detail-notes" name="notes" rows="3" maxlength="4000" placeholder="What is causing this? What could improve it?"></textarea></label>
-<section class="scenario"><h3>Explore a scenario</h3><p>Compare the expected benefit with the effort to make the change.</p><div class="fields"><label>Expected time reduction (%)<input id="detail-reduction" name="reduction" type="number" min="0" max="100" step="1" required></label><label>Implementation effort (hours)<input id="detail-effort" name="effort" type="number" min="0" max="10000" step="0.25" required></label></div><output id="scenario-output" aria-live="polite"></output></section>
-<section class="scenario"><h3>Record an outcome</h3><label>Weekly time after the change (minutes)<input id="detail-actual" name="actualMinutes" type="number" min="0" max="600000" step="1" placeholder="Leave blank until measured"></label><output id="outcome-output" aria-live="polite"></output></section>
+<form id="detail-form"><div class="fields"><label>Stage<select id="detail-stage" name="status"><option value="new">New</option><option value="investigating">Investigating</option><option value="pilot">Pilot</option><option value="resolved">Resolved</option></select></label><label>Owner<input id="detail-owner" name="owner" maxlength="80" placeholder="Unassigned"></label></div><label>Resolution path<select id="detail-path" name="path"><option value="undecided">Undecided</option><option value="manual">Manual fix</option><option value="process">Process improvement</option><option value="automation">Automation</option></select></label>
+<label>Notes<textarea id="detail-notes" name="notes" rows="3" maxlength="4000" placeholder="Findings and proposed fix"></textarea></label>
+<details class="scenario"><summary>Estimate savings</summary><div class="fields"><label>Time reduction (%)<input id="detail-reduction" name="reduction" type="number" min="0" max="100" step="1" required></label><label>Setup time (hours)<input id="detail-effort" name="effort" type="number" min="0" max="10000" step="0.25" required></label></div><output id="scenario-output" aria-live="polite"></output></details>
+<details class="scenario"><summary>Measure results</summary><label>Time after change (min / week)<input id="detail-actual" name="actualMinutes" type="number" min="0" max="600000" step="1" placeholder="Optional"></label><output id="outcome-output" aria-live="polite"></output></details>
 <div class="save-row"><p id="detail-notice" role="status"></p><button type="submit">Save changes</button></div></form>
-<section class="history"><h3>Activity</h3><ul id="activity"></ul></section></dialog>
+<details class="history"><summary>Activity</summary><ul id="activity"></ul></details></dialog>
+<dialog id="import-dialog" aria-labelledby="import-title">
+  <div class="dialog-head"><h2 id="import-title">Import issues</h2><button type="button" class="secondary" data-close="import-dialog">Close</button></div>
+  <p><a class="sample-link" href="sample-issues.csv" download>Download sample CSV</a></p>
+  <label class="import-file">CSV file<input id="import-file" type="file" accept=".csv,text/csv"></label>
+  <p id="import-status" role="status"></p>
+  <ul id="import-errors" class="import-errors"></ul>
+  <ul id="import-preview" class="import-preview"></ul>
+  <div class="save-row"><button id="confirm-import" type="button" disabled>Import issues</button></div>
+</dialog>
 </body></html>

@@ -1,0 +1,4 @@
+﻿Title,Team,Impact,Urgency,Occurrences per week,Minutes per occurrence,Repeatable,Status,Resolution path,Expected reduction (%),Implementation hours,Measured minutes per week
+Reconcile supplier requests,Digital services,2,2,20,8,Yes,resolved,process,50,2,60
+Compile inventory exceptions,Lab operations,2,1,12,15,Yes,pilot,automation,50,3,120
+Review overnight service alerts,Application support,3,3,15,10,Yes,investigating,automation,50,4,
