@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Prioritise operational issues and estimate automation savings with transparent rules."><title>Ops Triage Lab</title><link rel="stylesheet" href="style.css"><script defer src="logic.js"></script><script defer src="app.js"></script></head>
+<body><header><div class="wrap mast"><span class="mark" aria-hidden="true">OT</span><strong>Ops Triage Lab</strong><span class="tag">Portfolio demo · synthetic data</span></div></header>
+<main class="wrap"><section class="hero"><p class="eyebrow">WORKFLOW IMPROVEMENT</p><h1>Find the work worth fixing.</h1><p>Prioritise operational issues and estimate the time a small automation could save.</p></section>
+<section class="metrics" aria-label="Queue metrics"><div><span>Open issues</span><strong id="open">0</strong></div><div><span>High priority</span><strong id="high">0</strong></div><div><span>Estimated hours saved / week</span><strong id="hours">0.0</strong><small>Open automation candidates only</small></div></section>
+<div class="layout"><section class="panel queue"><div class="panel-head"><div><h2>Issue queue</h2><p>Highest priority first</p></div><button id="export" type="button" class="secondary">Export CSV</button></div>
+<div class="filters"><label>Search issues<input id="search" type="search" placeholder="Search by issue or team"></label><label>Status<select id="filter"><option value="open">Open</option><option value="all">All issues</option><option value="resolved">Resolved</option></select></label></div>
+<ul id="queue" aria-label="Issues"></ul></section>
+<div><section class="panel"><h2>Log an issue</h2><p>Use fictional examples for this demo.</p>
+<form id="form"><label>Issue title<input name="title" required maxlength="90" placeholder="e.g. Manual test log cleanup"></label>
+<label>Team<select name="team"><option>Lab operations</option><option>Digital services</option><option>Application support</option></select></label>
+<div class="fields"><label>Impact<select name="impact"><option value="1">1 · Minor</option><option value="2" selected>2 · Moderate</option><option value="3">3 · Major</option></select></label><label>Urgency<select name="urgency"><option value="1">1 · Flexible</option><option value="2" selected>2 · This week</option><option value="3">3 · Immediate</option></select></label>
+<label>Occurrences / week<input name="frequency" required type="number" min="1" max="1000" value="5"></label><label>Minutes / occurrence<input name="minutes" required type="number" min="1" max="600" value="15"></label></div>
+<label class="check"><input name="repeatable" type="checkbox"> Steps are consistent and repeatable</label>
+<button type="submit">Add to queue</button><p id="notice" role="status"></p></form></section>
+<details class="panel explain"><summary>How the scores work</summary><p>Priority = 2 × impact + urgency + frequency band. The band is 1 for 1–4 occurrences, 2 for 5–14, and 3 for 15 or more. A score of 10 or more is high priority, and 7–9 is medium.</p><p>Repeatable tasks taking at least 60 minutes a week are flagged for an automation pilot. Estimated savings assume 50% of manual time is saved. These are planning estimates, not measured results.</p><p>Rules run locally in your browser. No AI service or external database is used.</p></details></div></div>
+<footer>Built as a workflow improvement prototype. Records are stored in this browser.</footer></main></body></html>
